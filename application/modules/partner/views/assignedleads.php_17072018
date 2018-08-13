@@ -1,0 +1,212 @@
+<div class="content-wrapper">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Assigned Leads
+        <small></small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Examples</a></li>
+        <li class="active">Blank page</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header">
+            <?php 
+            // echo anchor('partner/lead/add_lead','<span class= "btn btn-info">Add Lead</span> ' ); 
+            ?> 
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="table-responsive">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Lead ID</th>                       
+                        <th>Registration Date</th>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>Pin Code</th>
+                        <th>Sales Motion</th>
+                        <th>Segment</th>
+                        <th>Value of Deal</th>
+                        <th>Product Required</th>
+                        <th>Involvement</th>
+                        <th>Expected Closing Date</th>
+                        <th>Current Status Lead</th>
+                        <!-- <th>Assgined to Admin</th> -->
+                        <th >Action</th>
+                        <th>Status</th>
+                        <!-- <th>Approval</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $count=1;
+                    foreach ($assigned_leads as $lead){
+                        ?>
+
+
+                        <?php 
+
+                    $logged_partner_data = $this->session->userdata('logged_in');
+
+                    $partner_id = $logged_partner_data->id;
+
+                        if($lead['assigned_to_partner']==$partner_id){ 
+
+                            ?>
+
+
+
+                        <tr>
+                            <th><?php echo $count;  ?></th>
+                            <td><?php echo $lead['lead_id']; ?></td>
+                            <td><?php echo $lead['registration_date']; ?></td>
+                            <td><?php echo $lead['customer_name']; ?></td>
+                            <td><?php echo $lead['customer_city']; ?></td>
+                            <td><?php echo $lead['pin_code']; ?></td>
+                            <td><?php echo $lead['sales_motion']; ?></td>
+                            <td><?php echo $lead['customer_segment']; ?></td>
+                            <td><?php echo $lead['value_of_deal']; ?></td>
+                            <td><?php echo $lead['product_required']; ?></td>
+                            <td><?php echo $lead['involvement']; ?></td>
+                            <td><?php echo $lead['expected_closing_date']; ?></td>
+                            <td><?php echo $lead['current_status_lead']; ?></td>
+                            <td>
+                                <?php echo anchor('partner/lead/edit_partner/'.$lead['id'], '<span class= "btn btn-info"><i class="fa fa-pencil"></i></span> ' ); ?>
+                                <span class= "btn btn-danger" onclick="delete_partner(<?php echo $lead['id'];?>)"><i class="fa fa-trash"></i></span>
+                            </td>
+                            <td>
+                               <?php echo ($lead['status']) ? '<a href="javascript:void(0)" st-data-id="'.$lead['id'].'" class="active-lang "><span class="btn active-btn btn-success">Active</span></a>' : '<a href="javascript:void(0)" st-data-id="'.$lead['id'].'" class="inactive-lang  "><span class="btn inactive-btn">Inactive</span></a>' ?>
+                           </td>
+                           <!-- <td>
+                               <?php 
+                                echo ($lead['approval']) ? '<a href="javascript:void(0)" data-id="'.$lead['id'].'" class="approved-partn "><span class="btn active-btn btn-success">Approved</span></a>' : '<a href="javascript:void(0)" data-id="'.$lead['id'].'" class="disapprove-partn  "><span class="btn inactive-btn">Disapproved</span></a>' 
+                               ?>
+                           </td> -->
+                       </tr>
+                       <?php
+                        $count++;
+                   }
+
+               }
+                   ?>
+               </tbody>
+           </table>
+       </div>
+       </div>
+       <!-- /.box-body -->
+   </div>
+   <!-- /.box -->
+</section>
+<!-- /.content -->
+</div>
+<script>
+$('#example1').DataTable();
+</script>
+<script type="text/javascript">
+function delete_partner(id){
+    //alert(id);
+    var result = confirm("Are you sure you want to delete ?");
+    if (result) {
+        $.ajax({
+            type:'POST',
+            url:'<?php echo site_url('partner/lead/delete_lead');?>',
+            data:{'id':id},
+            success: function(responce){
+            }
+        });
+        alert("Lead Deleted..!");
+        location.reload();
+    }
+}
+</script>
+<script type="text/javascript">
+$(document).on('click','.inactive-lang, .inactive-lang.label.label-default',function(){
+    var result = confirm("Are you sure you want to Active this Lead ?");
+    if(result){      
+        var id = $(this).attr('st-data-id');
+        var status_check = 1;
+        var eve = $(this);
+        $.post('<?php echo site_url('partner/lead/update_status_lead');?>',
+            {'id':id,'status':status_check},
+            function(resp){
+                var html_data = '<a href="javascript:void(0)" data-id="'+id+'"  ><span class=" btn active-btn  btn-success">Active</span></a>';
+                eve.html(html_data);
+                location.reload();
+            });
+    }
+});
+$(document).on('click','.active-lang, .active-lang.label.label-default',function(){
+    var result = confirm("Are you sure you want to Inactive this Lead ?");
+    if(result){
+        var id = $(this).attr('st-data-id');
+        var status_check = 0;
+        var eve = $(this);
+        $.post('<?php echo site_url('partner/lead/update_status_lead');?>',
+            {'id':id,'status':status_check},
+            function(resp){
+                var html_data = '<a href="javascript:void(0)" data-id="'+id+'" class="inactive-lang "><span class="btn inactive-btn">Inactive</span></a>';
+                eve.closest('td').html(html_data);
+                location.reload();
+            });
+    }
+});
+/* script for partner Approval */
+$(document).on('click','.disapprove-partn, .disapprove-partn.label.label-default',function(){
+    var result = confirm("Are you sure you want to Approve this Lead ?");
+    if(result){      
+        var id = $(this).attr('data-id');
+        var status_check = 1;
+        var eve = $(this);
+        $.post('<?php echo site_url('partner/lead/approved_disapproved_lead');?>',
+            {'id':id,'approval':status_check},
+            function(resp){
+                var html_data = '<a href="javascript:void(0)" data-id="'+id+'"  ><span class=" btn active-btn  btn-success">Approved</span></a>';
+                eve.html(html_data);
+                location.reload();
+            });
+    }
+});
+$(document).on('click','.approved-partn, .approved-partn.label.label-default',function(){
+    var result = confirm("Are you sure you want to Disapproved this Lead ?");
+    if(result){
+        var id = $(this).attr('data-id');
+        var status_check = 0;
+        var eve = $(this);
+        $.post('<?php echo site_url('partner/lead/approved_disapproved_lead');?>',
+            {'id':id,'approval':status_check},
+            function(resp){
+                var html_data = '<a href="javascript:void(0)" data-id="'+id+'" class="inactive-lang "><span class="btn inactive-btn">Disapproved</span></a>';
+                eve.closest('td').html(html_data);
+                location.reload();
+            });
+    }
+});
+/*For assign Admin*/
+function select_admin(row,id)
+{
+         var result = confirm("Are you sure you want to Assign to This Partner ?");
+         if(result){
+        var admin_name = $("#select_partner option:selected").html()
+        var partner_id = id.value;
+        var row_id = row;
+        //alert(row_id+admin_id);
+        $.post('<?php echo site_url('partner/lead/assigned_to_partner');?>',
+            {'id':row_id,'assigned':partner_id },
+            function(resp){
+                 alert("You have assgined..!");          
+                 location.reload();
+            });
+     }
+}
+</script>
+<style>
+#example1 tr>th:nth-child(14){min-width:100px;}
+</style>

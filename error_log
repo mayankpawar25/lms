@@ -1,0 +1,26 @@
+[28-Jun-2018 12:38:19 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 564
+[28-Jun-2018 12:38:19 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 564
+[28-Jun-2018 12:38:19 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 607
+[28-Jun-2018 20:38:29 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '}' in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/views/forget_password.php on line 29
+[28-Jun-2018 20:38:52 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '}' in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/views/forget_password.php on line 29
+[29-Jun-2018 11:26:29 Asia/Kolkata] PHP Fatal error:  Call to a member function change_userdata() on null in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/distributor/controllers/Auth.php on line 155
+[29-Jun-2018 13:38:30 Asia/Kolkata] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE), expecting function (T_FUNCTION) in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Auth.php on line 188
+[29-Jun-2018 13:38:30 Asia/Kolkata] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE), expecting function (T_FUNCTION) in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Auth.php on line 188
+[29-Jun-2018 13:38:36 Asia/Kolkata] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE), expecting function (T_FUNCTION) in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Auth.php on line 188
+[29-Jun-2018 13:40:03 Asia/Kolkata] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE), expecting function (T_FUNCTION) in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Auth.php on line 188
+[29-Jun-2018 09:21:43 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 564
+[29-Jun-2018 09:21:43 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 564
+[29-Jun-2018 09:21:43 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 607
+[30-Jun-2018 10:44:29 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 564
+[30-Jun-2018 10:44:29 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 564
+[30-Jun-2018 10:44:29 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 607
+[03-Jul-2018 14:16:14 Asia/Kolkata] PHP Fatal error:  Call to undefined method Admin::get_all_admins() in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Distributor.php on line 98
+[03-Jul-2018 14:22:04 Asia/Kolkata] PHP Fatal error:  Call to undefined method Admin::get_all_admins() in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Distributor.php on line 98
+[03-Jul-2018 14:22:35 Asia/Kolkata] PHP Fatal error:  Call to undefined method Admin::get_all_admins() in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Distributor.php on line 98
+[03-Jul-2018 14:43:37 Asia/Kolkata] PHP Fatal error:  Call to undefined method Admin::get_all_admins() in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Distributor.php on line 98
+[03-Jul-2018 14:45:37 Asia/Kolkata] PHP Fatal error:  Call to undefined method Admin::get_all_admins() in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Distributor.php on line 98
+[03-Jul-2018 14:47:09 Asia/Kolkata] PHP Fatal error:  Call to undefined method Admin::get_all_admins() in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Distributor.php on line 98
+[03-Jul-2018 14:47:22 Asia/Kolkata] PHP Fatal error:  Call to undefined method Admin::get_all_admins() in /home1/bbbng8z/demo.webcraftit.com/lms/application/modules/admin/controllers/Distributor.php on line 98
+[07-Jul-2018 07:53:44 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 564
+[07-Jul-2018 07:53:44 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 564
+[07-Jul-2018 07:53:44 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home1/bbbng8z/demo.webcraftit.com/lms/phpminiadmin.php on line 607

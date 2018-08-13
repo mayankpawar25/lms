@@ -1,0 +1,297 @@
+    <?php
+    (defined('BASEPATH')) OR exit('No direct script access allowed');
+    /**
+    * Description of users
+    *
+    * @author Uji Baba
+    *
+    */
+    class Partner extends MY_Controller {
+    function __construct(){
+        parent::__construct();
+        if (!$this->session->userdata('logged_in')){
+            redirect(base_url('admin/auth'));
+        }
+        $this->output->section('header','admin/header');
+        $this->output->section('sidebar','admin/sidebar');
+        $this->output->section('footer','admin/footer');
+        $this->output->set_title('Super Admin');
+        $this->output->set_template('admin');
+        $this->load->model('zones');
+        $this->load->model('partners');
+        $this->load->model('countries');
+        $this->load->model('states');
+        $this->load->model('cities');
+        $this->load->model('admin');
+        $this->load->library('form_validation');
+        /*jQuery Validation*/
+        $this->output->js('assets/themes/admin/additional-methods.min.js');
+        $this->output->js('assets/themes/admin/jquery.validate.min.js');
+        /* Check user types */
+        $loggedin_data = $this->session->userdata('logged_in');
+        if($loggedin_data->user_role != 1){
+            redirect(base_url('admin/auth/logout'));
+        }
+    }
+    function index() {
+        $this->output->append_title('Users');
+        $this->output->css('assets/themes/admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css');
+        $this->output->js('assets/themes/admin/bower_components/datatables.net/js/jquery.dataTables.min.js');
+        $this->output->js('assets/themes/admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js');
+        $this->load->view('home');
+    }
+    /* Show all the Partners */
+    function all_partners() {
+        $data['partners'] = $this->partners->get_all_partners();
+        $data['all_admins']=$this->admin->get_all_admins();
+        $this->output->append_title('Users');
+    $this->output->css('assets/themes/admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css');
+    $this->output->css('assets/themes/admin/costom-style.css'); 
+        $this->output->js('assets/themes/admin/bower_components/datatables.net/js/jquery.dataTables.min.js');
+        $this->output->js('assets/themes/admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js');
+        $this->load->view('allpartners',$data);
+    }
+    /* Admin profile */
+    function profile(){
+        $this->load->model('admin');
+        $this->output->append_title('My Profile');
+        $username = $this->session->userdata('logged_in')->username;
+        $data['admin'] = $this->user->get_admin($username);
+       print_r($data);
+    }
+    /* add Partner*/
+    public function add_partner(){
+        $data['countries']=$this->countries->get_all_countries();
+        $data['states']=$this->states->get_all_states();
+        $data['cities']=$this->cities->get_all_cities();
+        $data['all_admins']=$this->admin->get_all_admins();
+        $this->form_validation->set_rules('catagory','Select','required');
+        $this->form_validation->set_rules('first_name','First Name','required|alpha');
+        $this->form_validation->set_rules('last_name','Last Name','required|alpha');
+        //$this->form_validation->set_rules('email','Email','required|valid_email|is_unique[users.email]');
+        //$this->form_validation->set_rules('phone','Phone','required|max_length[10]|numeric');
+        $this->form_validation->set_rules('status','Status','required');
+        $this->form_validation->set_rules('address','Address','required');
+        $this->form_validation->set_rules('assigned','Assigned','required');
+        //$this->form_validation->set_rules('file_add','Profile Picture','required');
+        $this->form_validation->set_rules('city','City','required');
+        $this->form_validation->set_rules('state','State','required');
+        $this->form_validation->set_rules('country','Country','required');
+        $this->form_validation->set_rules('website','Website','required');
+        $this->form_validation->set_rules('source','Source','required');
+        $this->form_validation->set_rules('username','Username','required');
+        $this->form_validation->set_rules('password','Password','required');
+        $this->form_validation->set_rules('firm_name','Firm Name','required|alpha');
+        $this->form_validation->set_rules('registration','Registration No','required');
+        $this->form_validation->set_rules('firm_address','Firm Address','required');
+        $this->form_validation->set_rules('firm_city','Firm City','required');
+        $this->form_validation->set_rules('firm_state','Firm State','required');
+        $this->form_validation->set_rules('firm_country','Firm Country','required');
+       if($this->form_validation->run() == true){ 
+            if(isset($_POST)){  
+                if(!empty($_FILES['profile_pic']['name'])){
+                    $config['upload_path'] = 'uploads/distributors/images/';
+                    $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                    $new_name = time().$_FILES['profile_pic']['name'];
+                    $config['file_name'] = $new_name;
+                    //Load upload library and initialize configuration
+                    $this->load->library('upload',$config);
+                    $this->upload->initialize($config);
+                        if($this->upload->do_upload('profile_pic')){
+                            $uploadData = $this->upload->data();
+                            $picture = $config['upload_path'].$uploadData['file_name'];
+                        }else{
+                            $picture = '';
+                        }
+                }else{
+                    $picture = '';
+                }
+                   $email  = $this->input->post('email');
+                   $phone = $this->input->post('phone');
+                    if(count($email)<1){
+                        echo    $emails = $this->input->post('email');
+                    }else{
+                        echo  $emails = implode(",", $email);
+                    }                
+                    if(count($phone)<1){
+                     echo    $phones = $this->input->post('phone');
+                    }else{
+                     echo    $phones = implode(",", $phone);
+                    }
+                    $data=array(
+                    'name'=>$this->input->post('catagory'),
+                    'first_name'=>$this->input->post('first_name'),
+                    'last_name'=>$this->input->post('last_name'),
+                    //'account_number'=>$this->input->post('account_number'),
+                    'status'=>$this->input->post('status'),
+                    'email'=>$emails,
+                    'phone'=>$phones,
+                    'address'=>$this->input->post('address'),
+                    'city'=>$this->input->post('city'),
+                    'state'=>$this->input->post('state'),
+                    'country'=>$this->input->post('country'),
+                    'website'=>$this->input->post('website'),
+                    'assigned_to'=>$this->input->post('assigned'),
+                    'profile_pic'=>$this->input->post('file_add'),
+                    'source'=>$this->input->post('source'),
+                    'firm_name'=>$this->input->post('firm_name'),
+                    'registration'=>$this->input->post('registration'),
+                    'firm_address'=>$this->input->post('firm_address'),
+                    'firm_city'=>$this->input->post('firm_city'),
+                    'firm_state'=>$this->input->post('firm_state'),
+                    'firm_country'=>$this->input->post('firm_country'),
+                    'username'=>$this->input->post('username'),
+                    'password'=>$this->input->post('password'),
+                    'created' =>date("Y-m-d H:i:s"),  
+                    'profile_pic'=>$picture
+                  ) ;
+                if($this->partners->add_new_partner($data)){
+                        $this->session->set_flashdata('success','Distributor successfully added.');
+                }else{
+                       $this->session->set_flashdata('error','Failed to add new Distributor.!');
+                       redirect('admin/distributor/add_distributor'); 
+                }
+        }else{
+            $this->form_validation->set_message('catagory', 'catagory is must');
+            $this->form_validation->set_message('first_name', 'first  is must');
+            $this->form_validation->set_message('last_name', 'last name  is must');
+            $this->form_validation->set_message('email', 'email is must');
+            $this->form_validation->set_message('phone', 'phone is must');
+        }
+      }
+       $this->load->view('add_distributor',$data);
+    }
+    /*Send email to partner with his login ID and Password*/
+    public function send_email(){
+        $id = $this->input->post('id');
+        $data['partner'] = $this->partners->get_partner_by_id_from_users($id);
+         if(isset($data['partner'][0]['username'])){
+         $email = $data['partner'][0]['username'];
+        }
+        if(isset($data['partner'][0]['password'])){
+         $password = $data['partner'][0]['password'];    
+        }
+        // echo "<pre>";
+        // print_r($data['partner']);
+        // die();
+        // //$email = $this->partners->get_partner_email($id);
+        //$genrated_password  = $this->partners->randomPassword();
+                $from = 'lms@gmail.com';
+                $name = 'LMS';
+                $to = $email;
+                $subject = "LMS: System Gerated Username And Password";
+                $message = '<p>Hello </p><br> <br><p>You can login with thease credential<br>Usernaem:$email<br>Password:$password</p> <br><br> <p></p>';
+                $this->load->library('email');
+                $this->email->from($from, $name); 
+                $this->email->to($to);
+                $this->email->subject($subject); 
+                $this->email->message($message);
+                $this->email->set_mailtype("html");      
+                $mail_res=$this->email->send();
+                // if($mail_res)
+                // {
+                //    // $data=array(
+                //    //  'user_name'=>$email,
+                //    //  'password'=>md5($genrated_password),
+                //    //  'modified'=>date("Y-m-d H:i:s")
+                //    //  );
+
+
+                //    // $this->partners->update_username_password_partner($id,$data);
+                //    //$this->partners->update_username_password_partner_users($id,$data);
+                // }
+    }
+    /*edit Partner*/
+    public function edit_partner($id=''){
+    if (isset($_POST) && ! empty($_POST)) {
+        $data['firm_name'] = $this->input->post('firm_name');
+        $data['owner_name'] = $this->input->post('owner_name');
+        $data['contact_no'] = $this->input->post('contact_no');
+        $data['email'] = $this->input->post('email');
+        $data['firm_incorporation_date'] = $this->input->post('incorporation_date');
+        $data['product_dealing_in'] = $this->input->post('product_dealing_in');
+        $data['turn_over'] = $this->input->post('turn_over');
+        $data['current_ms_perc_overall_business'] = $this->input->post('overall_business');
+        $data['product_percentage_share_terms_value'] = $this->input->post('product_terms_value');
+        $data['product_promoted_past'] = $this->input->post('promoted_past');
+            if($this->partners->update_partner($id,$data)){
+                //$this->session->set_flashdata('success','updated successfully');
+                redirect('admin/partner/all_partners');
+            }
+    }else{
+            $data['partner_detail'] = $this->partners->get_partner_by_id($id);
+            $this->load->view('edit_partner' ,$data);
+        }
+    }
+    /*delete Partner*/
+    public function delete_partner(){
+        $id = $this->input->post('id');
+        $result = $this->partners->delete_partner($id);
+        redirect('admin/alldistributors');
+    }
+    /*update Partner status*/
+    public function update_status_partner(){
+        $id = $this->input->post('id');
+        $data=array(
+            'status'=>$this->input->post('status')
+        );
+        $this->partners->update_partner_status($id,$data);
+    }
+    /*Approval by admin to partner*/
+    public function approved_disapproved_partner(){
+        $id = $this->input->post('id');
+
+        $partner['details']  = $this->partners->get_partner_by_id($id);
+
+        //$email = $this->partners->get_partner_email($id);
+        $genrated_password  = $this->partners->randomPassword();
+
+        $data=array(
+            'approval'=>$this->input->post('approval')
+        );
+        $this->partners->approval_by_admin($id,$data);
+
+        if(isset($partner['details'][0]['owner_name'])){
+
+            $full_name =$partner['details'][0]['owner_name'];    
+        }
+
+        if(isset($partner['details'][0]['email'])){
+
+            $username = $partner['details'][0]['email'];
+        }
+
+        if(isset($partner['details'][0]['email'])){
+
+            $email =$partner['details'][0]['email'];
+        }
+
+
+
+        $partner_data=array(
+
+            'full_name'=>$full_name,
+            'username'=>$username,
+            'password'=>md5($genrated_password),
+            'email'=>$email,
+            //'phone'=>
+            //'image'=>
+            'user_role'=>4,
+            //'last_login_time'=>
+            //'last_login_ip'=>'',
+            //'status'=>
+            'created'=>date("Y-m-d H:i:s")
+        ); 
+
+        $this->partners->update_username_password_users($partner_data);
+        
+    }
+    public function assigned_to_admin(){
+        $id = $this->input->post('id');
+        $data=array(
+            'assigned_to'=>$this->input->post('assigned')
+        );
+       $this->partners->assigned_to_this_admin($id,$data);
+    }
+}
+    

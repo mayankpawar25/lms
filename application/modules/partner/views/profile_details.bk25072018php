@@ -1,0 +1,87 @@
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+              My Profile            
+        </h1>
+        <?php echo $breadcrumb; ?>
+    </section>
+
+   
+   
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><!-- Data Table With Full Features --></h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+             <div class="col-md-12 col-sm-6 col-xs-6  ">
+               <?php
+             $count=0;
+             //echo "<pre>";
+             //print_r($this->session->userdata('logged_in'));
+             //print_r($profiles);
+                         foreach ($profiles as $profile){
+        ?>
+               <div class="table-responsive">
+        <table class="table">
+          
+            <tr>
+              <th>Firm name</th>
+              <th><?php echo $profile['firm_name']; ?></th>
+            </tr>
+
+            <tr>
+              <th>Owner Name</th>
+              <th><?php echo $profile['owner_name']; ?></th>
+            </tr>
+
+             <tr>
+              <th>Contact No</th>
+              <th><?php echo $profile['contact_no']; ?></th>
+            </tr>
+
+             <tr>
+              <th>Email</th>
+              <th><?php echo $profile['email']; ?></th>
+            </tr>
+
+             <tr>
+              <th>Firm Incorporation Date</th>
+              <th><?php echo $profile['firm_incorporation_date']; ?></th>
+            </tr>
+
+
+         
+        </table>
+      </div>
+      <?php
+      $count++;
+      } 
+      ?>
+      </div>
+            </div>
+           
+        </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
+    </section>
+    <!-- /.content -->
+</div>
+
+
+
+<script>
+    $('#example1').DataTable();
+
+</script>

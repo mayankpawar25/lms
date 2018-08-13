@@ -1,0 +1,205 @@
+<div class="content-wrapper">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        All Partners
+        <small></small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Examples</a></li>
+        <li class="active">Blank page</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header">
+            <?php 
+            //echo anchor('admin/lead/add_lead','<span class= "btn btn-info">Add Lead</span> ' ); 
+            ?> 
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="table-responsive">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Owners Name</th>
+                        <th>Contact No.</th>
+                        <th>Email ID</th>
+                        <th>Date Incorporation of the Firm</th>
+                        <th>Products Dealing In</th>
+                        <th>Turn Over</th>
+                        <th>Current MS % To Over All Business</th>
+                        <th>MS Products % share in terms of Value</th>
+                        <th>MS Products Promoted in the Past</th>
+                        <!-- <th>Assigned_to</th> -->
+                        <th>Action</th>
+                        <th>Status</th>
+                        <th>Generate Credentials</th>
+                        <th>Approval</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $count=1;
+                    foreach ($partners as $partner){
+                        ?>
+                        <tr>
+                             <th><?php echo $count;  ?></th> 
+                             <td><?php echo $partner['owner_name']; ?></td>
+                            <td><?php echo $partner['contact_no']; ?></td>
+                            <td><?php echo $partner['email']; ?></td>
+                            <td><?php echo $partner['firm_incorporation_date']; ?></td>
+                            <td><?php echo $partner['product_dealing_in']; ?></td>
+                            <td><?php echo $partner['turn_over']; ?></td> 
+                            <td><?php echo $partner['current_ms_perc_overall_business']; ?></td>
+                            <td><?php echo $partner['product_percentage_share_terms_value']; ?></td>
+                            <td><?php echo $partner['product_promoted_past']; ?></td>
+                            <td>
+                                <?php echo anchor('admin/partner/edit_partner/'.$partner['id'], '<span class= "btn btn-info"><i class="fa fa-edit"></i></span> ' ); ?>
+                                <span class= "btn btn-danger" onclick="delete_partner(<?php echo $partner['id'];?>)"><i class="fa fa-trash"></i></span>
+                            </td>
+                            <td>
+                               <?php echo ($partner['status']) ? '<a href="javascript:void(0)" st-data-id="'.$partner['id'].'" class="active-lang "><span class="btn active-btn btn-success">Active</span></a>' : '<a href="javascript:void(0)" st-data-id="'.$partner['id'].'" class="inactive-lang  "><span class="btn inactive-btn">Inactive</span></a>' ?>
+                           </td>
+                           <th>
+                            <?php if($partner['approval']==1){ ?>
+                            <button type="button" class="btn  btn-primary" onclick="sendmail_to_partner(<?php echo $partner['id']; ?>)"> <i class="fa fa-envelope"></i> Send</button>
+                            <?php } ?>
+                           </th>
+                           <td>
+                               <?php echo ($partner['approval']) ? '<a href="javascript:void(0)" data-id="'.$partner['id'].'" class="approved-partn "><span class="btn active-btn btn-success">Approved</span></a>' : '<a href="javascript:void(0)" data-id="'.$partner['id'].'" class="disapprove-partn  "><span class="btn inactive-btn">Disapproved</span></a>' ?>
+                           </td>
+                       </tr>
+                       <?php
+                       $count++;
+                   }
+                   ?>
+               </tbody>
+           </table>
+       </div></div>
+       <!-- /.box-body -->
+   </div>
+   <!-- /.box -->
+</section>
+<!-- /.content -->
+</div>
+<script>
+$('#example1').DataTable();
+</script>
+<script type="text/javascript">
+function delete_partner(id){
+    //alert(id);
+    var result = confirm("Are you sure you want to delete ?");
+    if (result) {
+        $.ajax({
+            type:'POST',
+            url:'<?php echo site_url('admin/partner/delete_partner');?>',
+            data:{'id':id},
+            success: function(responce){
+            }
+        });
+        alert("Partner Deleted..!");
+        location.reload();
+    }
+}
+</script>
+<script type="text/javascript">
+$(document).on('click','.inactive-lang, .inactive-lang.label.label-default',function(){
+    var result = confirm("Are you sure you want to Active this Parner ?");
+    if(result){      
+        var id = $(this).attr('st-data-id');
+        var status_check = 1;
+        var eve = $(this);
+        $.post('<?php echo site_url('admin/partner/update_status_partner');?>',
+            {'id':id,'status':status_check},
+            function(resp){
+                var html_data = '<a href="javascript:void(0)" data-id="'+id+'"  ><span class=" btn active-btn  btn-success">Active</span></a>';
+                eve.html(html_data);
+                location.reload();
+            });
+    }
+});
+$(document).on('click','.active-lang, .active-lang.label.label-default',function(){
+    var result = confirm("Are you sure you want to Inactive this Parner ?");
+    if(result){
+        var id = $(this).attr('st-data-id');
+        var status_check = 0;
+        var eve = $(this);
+        $.post('<?php echo site_url('admin/partner/update_status_partner');?>',
+            {'id':id,'status':status_check},
+            function(resp){
+                var html_data = '<a href="javascript:void(0)" data-id="'+id+'" class="inactive-lang "><span class="btn inactive-btn">Inactive</span></a>';
+                eve.closest('td').html(html_data);
+                location.reload();
+            });
+    }
+});
+/* script for partner Approval */
+$(document).on('click','.disapprove-partn, .disapprove-partn.label.label-default',function(){
+    var result = confirm("Are you sure you want to Approve this Partner ?");
+    if(result){      
+        var id = $(this).attr('data-id');
+        var status_check = 1;
+        var eve = $(this);
+        $.post('<?php echo site_url('admin/partner/approved_disapproved_partner');?>',
+            {'id':id,'approval':status_check},
+            function(resp){
+                var html_data = '<a href="javascript:void(0)" data-id="'+id+'"  ><span class=" btn active-btn  btn-success">Approved</span></a>';
+                eve.html(html_data);
+                location.reload();
+            });
+    }
+});
+$(document).on('click','.approved-partn, .approved-partn.label.label-default',function(){
+    var result = confirm("Are you sure you want to Disapproved this Partner ?");
+    if(result){
+        var id = $(this).attr('data-id');
+        var status_check = 0;
+        var eve = $(this);
+        $.post('<?php echo site_url('admin/partner/approved_disapproved_partner');?>',
+            {'id':id,'approval':status_check},
+            function(resp){
+                var html_data = '<a href="javascript:void(0)" data-id="'+id+'" class="inactive-lang "><span class="btn inactive-btn">Disapproved</span></a>';
+                eve.closest('td').html(html_data);
+                location.reload();
+            });
+    }
+});
+/*For assign Admin*/
+function select_admin(row,id)
+{
+        var result = confirm("Are you sure you want to assign to This Admin ?");
+        if(result){
+        var admin_name = $("#select_admin option:selected").html()
+        var admin_id = id.value;
+        var row_id = row;
+        $.post('<?php //echo site_url('admin/partner/assigned_to_admin');?>',
+            {'id':row_id,'assigned':admin_id },
+            function(resp){
+                alert("You have assgined..!");          
+                location.reload();
+            });
+     }
+}
+/*Send email to partner with his login ID and Password */
+function sendmail_to_partner(id){
+            var return_confirmation = confirm('Are you sure! You want to send Credentials to this partner ?');
+            if(return_confirmation){
+                $.post('<?php echo site_url('admin/partner/send_email');?>',
+                    {'id':id},function(resp){
+                    if(resp){
+                        alert('Email Sent Successfully..!');
+                    }
+                });
+            }
+        }
+</script>
+<style type="text/css">
+    
+    #example1_wrapper tr>th:nth-child(11){min-width:100px;}
+</style>
